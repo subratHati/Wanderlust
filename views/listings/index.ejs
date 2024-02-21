@@ -1,0 +1,153 @@
+<% layout("/layouts/boilerplate") -%>
+
+<style>
+    .filters{
+        width: 100%;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        padding: 1rem;
+    }
+    .filter{
+        margin-right:2rem;
+        margin-top: 2rem;
+        text-align: center;
+        opacity: 0.8; 
+        padding: 0.2rem;
+    }
+    .filter p{
+        font-size: 0.8rem;
+    }
+    
+    .filter:hover{
+        opacity: 1;
+        cursor:pointer;
+        .underline{
+          visibility: visible;
+        }
+    }
+
+    .underline{
+        background-color: black;
+        height: 0.1rem;
+       visibility: hidden;
+    }
+
+    .tax-toggle{
+        display: flex;
+        align-items: center;
+        border: 1px solid rgb(155, 155, 155);
+        border-radius: 1rem;
+        height: 3rem;
+        padding: 1rem;
+        
+        
+    }
+    .tax-info{
+        display: none;
+    }
+</style>
+
+    <body>
+       <!-- NOTE:we define our flash message in boiler plate -->
+     
+        <!-- UI filter list -->
+        <div class="filters">
+            <div class="filter">
+                <div class="icon"><i class="fa-solid fa-fire"></i></div>
+                <p>Trending</p>
+                <div class="underline"></div>
+            </div>
+            <div class="filter">
+                <div class="icon"><i class="fa-solid fa-hotel"></i></div>
+                <p>Hotels</p>
+                <div class="underline"></div>
+            </div>
+            <div class="filter">
+                <div class="icon"><i class="fa-solid fa-umbrella-beach"></i></div>
+                <p>Beaches</p>
+                <div class="underline"></div>
+            </div>
+            <div class="filter">
+                <div class="icon"><i class="fa-solid fa-person-swimming"></i></div>
+                <p>Amazing Pools</p>
+                <div class="underline"></div>
+            </div>
+            <div class="filter">
+                <div class="icon"><i class="fa-solid fa-key"></i></div>
+                <p>New</p>
+                <div class="underline"></div>
+            </div>
+            <div class="filter">
+                <div class="icon"><i class="fa-solid fa-mountain-city"></i></div>
+                <p>Mountain city</p>
+                <div class="underline"></div>
+            </div>
+            <div class="filter">
+                <div class="icon"><i class="fa-regular fa-snowflake"></i></div>
+                <p>Arctic</p>
+                <div class="underline"></div>
+            </div>
+            <div class="filter">
+                <div class="icon"><i class="fa-brands fa-fort-awesome"></i></div>
+                <p>Castles</p>
+                <div class="underline"></div>
+            </div>
+            <div class="filter">
+                <div class="icon"><i class="fa-solid fa-campground"></i></div>
+                <p>Camping</p>
+                <div class="underline"></div>
+            </div>
+            <!-- <div class="filter">
+                <div class="icon"><i class="fa-solid fa-igloo"></i></div>
+                <p>Igloo stay</p>
+                <div class="underline"></div>
+            </div> -->
+
+            <div class="tax-toggle">
+                <div class="form-check-reverse form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+                    <label class="form-check-label" for="flexSwitchCheckDefault">Display total after taxes</label>
+                  </div>
+            </div>
+        </div>
+
+
+
+        <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1">
+            <% for(list of allList){ %>
+                <a href="/listing/<%=list._id%>" class="listing-link">
+                <div class="card col listing-card">
+                    <img src="<%=list.image.url%>" class="card-img-top" alt="image not available" style="height: 20rem;">
+                    <div class="card-img-overlay"></div>
+                    <div class="card-body">
+                        <b><p class="card-text">
+                            <%=list.title%>
+                        </p></b>
+                        <p class="card-text">&#8377;<%=list.price.toLocaleString("en-IN")%>/ night
+                            <i class="tax-info"> &nbsp; &nbsp; +18% GST</i>
+                        </p>
+                        <p></p>
+                    </div>
+                </div>
+            </a>
+                <% } %>
+        </div>
+
+        <script>
+            let taxSwitch = document.getElementById("flexSwitchCheckDefault");
+
+            taxSwitch.addEventListener("click" ,()=>{
+                let taxInfo = document.getElementsByClassName("tax-info");
+                for(info of taxInfo){  //here we use for loop because taxInfo is a array inside which every property's tax value stored.
+                    if(info.style.display == "inline"){
+                        info.style.display = "none";
+                    }else{
+                        info.style.display="inline";
+                    }
+                   
+                }
+                
+            })
+        </script>
+    </body>
