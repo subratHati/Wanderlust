@@ -109,6 +109,9 @@ app.get("/demoUser", async(req, res)=>{
 
 // This is a middleware. And every time our server get a request on "/listing", this middleware send the request to "listingRouter" which is require from router folder.And in this folder all our "/listing" routes are present.
 // We did this restructure because to organise things.
+app.get("/", (req, res)=>{
+    res.redirect("/listing");
+})
 app.use("/listing", listingRouter);
 
 // This is a middleware. And every time our server get a request on "/listing/:id/reviews", this middleware send the request to "reviewsRouter" which is require from router folder.And in this folder all our "/listing" routes are present.
