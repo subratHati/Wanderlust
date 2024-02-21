@@ -69,7 +69,7 @@ main()
     })
 
 async function main() {
-    await mongoose.connect(dburl);
+    await mongoose.connect(MONGO_URL);
 }
 
 // Root route
