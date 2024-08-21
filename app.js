@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require("express");
 const app = express();
-const port = 8080;
+const port = 3000;
 const mongoose = require("mongoose");
  const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust" //when we use our local storage we use like this but when we use cloude storage, that process is diff.
 const dburl = process.env.ATLASDB_URL;
@@ -40,8 +40,8 @@ store.on("err", ()=>{ //If any error occur on mongo session store.
 })
 
 const sessionOption = {
-     store,   //this line is similar to store:store,(the second store is our object created above).And we add this line because we created a session store in cloud and we want this to pass to our session.
-     secret :process.env.SECRET,
+       //this line is similar to store:store,(the second store is our object created above).And we add this line because we created a session store in cloud and we want this to pass to our session.
+     secret:"mysupersecretkey",
      resave:false,
      saveUninitialized:true,
      cookie:{
@@ -69,7 +69,7 @@ main()
     })
 
 async function main() {
-    await mongoose.connect(dburl);
+    await mongoose.connect(MONGO_URL);
 }
 
 // Root route
@@ -112,6 +112,23 @@ app.get("/demoUser", async(req, res)=>{
 app.get("/", (req, res)=>{
     res.redirect("/listing");
 })
+
+//Search route.
+app.get("/search", async(req, res)=>{
+    let search = req.query.search;
+    let listings = await Listing.find({"title": {$regex :".*"+search+".*", $options:"i"}});
+    if(listings.length == 0){
+        req.flash("error", "Listing you requested for doesn't exist!");
+        res.redirect("/listing");
+    }else{
+        // let id = listings[0]._id;
+        // res.render("listings/show.ejs", {listings});
+        res.render("listings/index.ejs", {allList:listings});
+    }
+       
+    
+})
+
 app.use("/listing", listingRouter);
 
 // This is a middleware. And every time our server get a request on "/listing/:id/reviews", this middleware send the request to "reviewsRouter" which is require from router folder.And in this folder all our "/listing" routes are present.
@@ -134,7 +151,7 @@ app.use((err, req, res, next)=>{
 })
 
 app.listen(port, () => {
-    console.log(`Server is listening to port 8080`);
+    console.log(`Server is listening to port ${port}`);
 });
 
 // IMPORTANT NOTE:Before deploying our project to render.com we have to set our "engine" in package.json and mention their our node version(To stay error free).We have to add this code explicitly, our machine doesn't add this automatically.But just remember we have to add this just before uploading our project on render.com.
