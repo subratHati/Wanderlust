@@ -69,7 +69,7 @@ main()
     })
 
 async function main() {
-    await mongoose.connect(MONGO_URL);
+    await mongoose.connect(dburl);
 }
 
 // Root route
@@ -125,9 +125,7 @@ app.get("/search", async(req, res)=>{
         // res.render("listings/show.ejs", {listings});
         res.render("listings/index.ejs", {allList:listings});
     }
-       
-    
-})
+});
 
 app.use("/listing", listingRouter);
 
